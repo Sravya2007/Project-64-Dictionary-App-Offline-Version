@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Project63-Dictionary-App-Online-Version",
-    "slug": "Project63-Dictionary-App-Online-Version",
+    "name": "Dictionary-App-Online-Version",
+    "slug": "Dictionary-App-Online-Version",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,13 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.testuser.dictionary"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.testuser.dictionary"
     },
     "web": {
       "favicon": "./assets/favicon.png"

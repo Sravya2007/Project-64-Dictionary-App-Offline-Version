@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Header } from 'react-native-elements';
+import dictionary from '../database';
 
 export default class HomeScreen extends React.Component {
     constructor() {
@@ -14,40 +15,26 @@ export default class HomeScreen extends React.Component {
         }
     }
 
-    getWord = (word) => {
-        var searchKeyword = word.toLowerCase()
-        var url = "https://rupinwhitehatjr.github.io/dictionary/" + searchKeyword + ".json"   
-        
+    getWord = (text) => {
+        var text = text.toLowerCase();
+        try {
+            var word = dictionary[text]["word"]
+            var lexicalCategory = dictionary[text]["lexicalCategory"]
+            var definition = dictionary[text]["definition"]
 
-        return fetch(url)
-        .then((data) => {
-            if(data.status === 200) {
-                return data.json()
-            } else {
-                return null
-            }
+            this.setState({
+                "word": word,
+                "definition": definition,
+                "lexicalCategory": lexicalCategory
         })
-        .then((response) => {
-            var responseObject = response
-
-            if(responseObject) {
-                var wordData = responseObject.definitions[0]
-                var definition = wordData.description
-                var lexicalCategory = wordData.wordtype
-
-                this.setState({
-                    "word": this.state.text,
-                    "definition": definition,
-                    "lexicalCategory": lexicalCategory
-                })
-            } else {
-                this.setState({
-                    "word": this.state.text,
-                    "definition": "Not Found",
-                    "lexicalCategory": "Not Found"
-                })
-            }
-        })
+        }
+        catch(err) {
+            alert("Sorry, this word is not available right now. We are working on improvements for the future.")
+            this.setState({
+                text: text,
+                isSearchPressed: false
+            })
+        }
     }
     
 
@@ -57,13 +44,14 @@ export default class HomeScreen extends React.Component {
             <ScrollView>
             <Header backgroundColor = {"#5C0032"} centerComponent = {{text: 'Pocket Dictionary', style: {color: 'white', fontSize: 28}}}/>
 
+            <Image  style = {styles.imageIcon} source={{ uri: 'https://www.shareicon.net/data/128x128/2016/06/21/611136_dictionary_128x128.png', }}/>
+
             <TextInput style = {styles.inputBox} onChangeText = {text => {
                 this.setState({
                     text: text,
                     isSearchPressed: false,
                     word: "Loading...",
                     lexicalCategory: '',
-                    examples: [],
                     definition: ''
                 })
             }}/>
@@ -123,7 +111,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
 
     inputBox: {
-        marginTop: 100,
+        marginTop: 80,
         width: '80%',
         alignSelf: 'center',
         height: 40,
@@ -178,5 +166,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginLeft: 20,
         marginRight: 20
+    },
+    imageIcon:{
+      width: 100,
+      height: 100,
+      alignSelf: 'center',
+      marginTop: 30
     }
 })
